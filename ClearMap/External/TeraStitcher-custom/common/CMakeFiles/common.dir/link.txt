@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcommon.a  CMakeFiles/common.dir/ProgressBar.cpp.o CMakeFiles/common.dir/QProgressSender.cpp.o CMakeFiles/common.dir/config.cpp.o
+/usr/bin/ranlib libcommon.a

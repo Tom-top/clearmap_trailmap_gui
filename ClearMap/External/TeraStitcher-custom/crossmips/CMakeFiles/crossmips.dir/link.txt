@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcrossmips.a  CMakeFiles/crossmips.dir/libcrossmips.cpp.o CMakeFiles/crossmips.dir/compute_funcs.cpp.o
+/usr/bin/ranlib libcrossmips.a

@@ -1,0 +1,101 @@
+Determining size of off64_t failed with the following output:
+Change Dir: /home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bfeee/fast"
+/usr/bin/make -f CMakeFiles/cmTC_bfeee.dir/build.make CMakeFiles/cmTC_bfeee.dir/build
+make[1]: Entering directory '/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bfeee.dir/OFF64_T.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_bfeee.dir/OFF64_T.c.o   -c /home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CheckTypeSize/OFF64_T.c
+/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CheckTypeSize/OFF64_T.c:17:22: error: ‘off64_t’ undeclared here (not in a function)
+ #define SIZE (sizeof(off64_t))
+                      ^
+/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CheckTypeSize/OFF64_T.c:19:12: note: in expansion of macro ‘SIZE’
+   ('0' + ((SIZE / 10000)%10)),
+            ^
+CMakeFiles/cmTC_bfeee.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_bfeee.dir/OFF64_T.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_bfeee.dir/OFF64_T.c.o] Error 1
+make[1]: Leaving directory '/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_bfeee/fast' failed
+make: *** [cmTC_bfeee/fast] Error 2
+
+/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CheckTypeSize/OFF64_T.c:
+#include <sys/types.h>
+#include <stdint.h>
+#include <stddef.h>
+
+
+#undef KEY
+#if defined(__i386)
+# define KEY '_','_','i','3','8','6'
+#elif defined(__x86_64)
+# define KEY '_','_','x','8','6','_','6','4'
+#elif defined(__ppc__)
+# define KEY '_','_','p','p','c','_','_'
+#elif defined(__ppc64__)
+# define KEY '_','_','p','p','c','6','4','_','_'
+#endif
+
+#define SIZE (sizeof(off64_t))
+char info_size[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)),
+  ']',
+#ifdef KEY
+  ' ','k','e','y','[', KEY, ']',
+#endif
+  '\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_size[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining if the include file io.h exists failed with the following output:
+Change Dir: /home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8578e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8578e.dir/build.make CMakeFiles/cmTC_8578e.dir/build
+make[1]: Entering directory '/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8578e.dir/CheckIncludeFile.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_8578e.dir/CheckIncludeFile.c.o   -c /home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:16: fatal error: io.h: No such file or directory
+compilation terminated.
+CMakeFiles/cmTC_8578e.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_8578e.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_8578e.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_8578e/fast' failed
+make: *** [cmTC_8578e/fast] Error 2
+
+
+Determining if the function jbg_newlen exists failed with the following output:
+Change Dir: /home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8fc6f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8fc6f.dir/build.make CMakeFiles/cmTC_8fc6f.dir/build
+make[1]: Entering directory '/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8fc6f.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=jbg_newlen   -o CMakeFiles/cmTC_8fc6f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_8fc6f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8fc6f.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=jbg_newlen    CMakeFiles/cmTC_8fc6f.dir/CheckFunctionExists.c.o  -o cmTC_8fc6f -rdynamic 
+CMakeFiles/cmTC_8fc6f.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x15): undefined reference to `jbg_newlen'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_8fc6f.dir/build.make:97: recipe for target 'cmTC_8fc6f' failed
+make[1]: *** [cmTC_8fc6f] Error 1
+make[1]: Leaving directory '/home/nicolas.renier/Programs/TeraStitcher-custom/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_8fc6f/fast' failed
+make: *** [cmTC_8fc6f/fast] Error 2
+
+

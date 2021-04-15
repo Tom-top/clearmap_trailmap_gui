@@ -1,0 +1,2 @@
+/usr/bin/ar qc libvolumemanager.a  CMakeFiles/volumemanager.dir/vmBlock.cpp.o CMakeFiles/volumemanager.dir/vmVirtualStack.cpp.o CMakeFiles/volumemanager.dir/vmStackedVolume.cpp.o CMakeFiles/volumemanager.dir/vmCacheManager.cpp.o CMakeFiles/volumemanager.dir/vmBlockVolume.cpp.o CMakeFiles/volumemanager.dir/volumemanager.config.cpp.o CMakeFiles/volumemanager.dir/vmVirtualVolume.cpp.o CMakeFiles/volumemanager.dir/vmStack.cpp.o
+/usr/bin/ranlib libvolumemanager.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmappingmanager.a  CMakeFiles/mappingmanager.dir/MappingObjects.cpp.o CMakeFiles/mappingmanager.dir/3D_objects.cpp.o CMakeFiles/mappingmanager.dir/reg_utils.cpp.o
+/usr/bin/ranlib libmappingmanager.a

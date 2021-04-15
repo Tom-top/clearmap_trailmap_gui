@@ -1,0 +1,2 @@
+/usr/bin/ar qc libioplugin_tiff2D.a  CMakeFiles/ioplugin_tiff2D.dir/tiff2D.cpp.o
+/usr/bin/ranlib libioplugin_tiff2D.a

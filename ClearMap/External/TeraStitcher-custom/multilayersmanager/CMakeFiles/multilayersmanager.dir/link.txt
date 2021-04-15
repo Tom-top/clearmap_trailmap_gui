@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmultilayersmanager.a  CMakeFiles/multilayersmanager.dir/MergeTiles2.cpp.o CMakeFiles/multilayersmanager.dir/StackStitcher2.cpp.o CMakeFiles/multilayersmanager.dir/MultiLayers.cpp.o
+/usr/bin/ranlib libmultilayersmanager.a

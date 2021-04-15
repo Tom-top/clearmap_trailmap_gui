@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiomanager.a  CMakeFiles/iomanager.dir/iomanager.config.cpp.o
+/usr/bin/ranlib libiomanager.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libioplugin_tiff3D.a  CMakeFiles/ioplugin_tiff3D.dir/tiff3D.cpp.o
+/usr/bin/ranlib libioplugin_tiff3D.a
