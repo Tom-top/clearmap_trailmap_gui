@@ -769,7 +769,8 @@ def readPoints(filename, indices = True, binary = True):
 
 
 
-def transformPoints(source, sink = None, transformParameterFile = None, transformDirectory = None, indices = True, resultDirectory = None, tmpFile = None, binary = True):
+def transformPoints(source, sink = None, transformParameterFile = None, transformDirectory = None, indices = True,
+                    resultDirectory = None, tmpFile = None, binary = True):
     """Transform coordinates math:`x` via elastix estimated transformation to :math:`T(x)`
 
     Note the transformation is from the fixed image coorindates to the moving image coordiantes.
@@ -833,7 +834,8 @@ def transformPoints(source, sink = None, transformParameterFile = None, transfor
       os.makedirs(outdirname);
     
     #transform
-    transformparameterdir, transformparameterfile = transformDirectoryAndFile(transformParameterFile = transformParameterFile, transformDirectory = transformDirectory);
+    transformparameterdir, transformparameterfile = transformDirectoryAndFile(transformParameterFile = transformParameterFile,
+                                                                              transformDirectory = transformDirectory);
     setPathTransformFiles(transformparameterdir);
     
     #run transformix   

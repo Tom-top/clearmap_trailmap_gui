@@ -30,8 +30,8 @@ AutoFluoFile = "";
 
 FinalOrientation = (1,2,3);
 
-# DataResolution = (1.625,1.625,6);
-DataResolution = (5,5,6);
+DataResolution = (1.625,1.625,6);
+# DataResolution = (5,5,6);
 cFosDetectionRange = {"x" : all, "y" : all, "z" : all};
 
 AutoResolution = (5,5,6);
@@ -41,10 +41,10 @@ TemplateResolution = (25,25,25);
 Upsample = True;
 
 TemplateFile10m = os.path.join(clearmapRessourcesDir+"/10um_Autofluo_Reference/","average_template_10_horizontal.tif");
-TemplateFile = os.path.join(clearmapRessourcesDir+"/25um_Autofluo_Reference/","template_horizontal_1-289_25.tif");
+TemplateFile = os.path.join(clearmapRessourcesDir+"/25um_Autofluo_Reference/","template_Youenn_1-288.tif");
 #TemplateFile = os.path.join(clearmapRessourcesDir+"/25um_Autofluo_Reference/","Template_1-279_No_Bulb.tif");
 TemplateFileNrrd = os.path.join(clearmapRessourcesDir+"/25um_Autofluo_Reference/","template_horizontal_1-289_25.nrrd");
-AnnotationFile = os.path.join(clearmapRessourcesDir+"/Regions_annotations/","annotation_279_new_EW_symetric.tif");
+AnnotationFile = os.path.join(clearmapRessourcesDir+"/Regions_annotations/","ABA_25um_annotation_Youenn.tif");
 AnnotationFileNrrd = os.path.join(clearmapRessourcesDir+"/Regions_annotations/","annotation_279_new.nrrd");
     
 try :
@@ -93,7 +93,7 @@ cFosTransformedDir = os.path.join(workdir,"elastix_cfos_transformed");
 
 ResamplingParametercFos = {
     "processes"  : 24,
-    "source"     : cFosfile,
+    "source"     : os.path.join(outdir, 'Z\d{4}.tif'),
     "sink"       : os.path.join(workdir, 'cfos_resampled.tif'),
     "resolutionSource" : DataResolution,
     "resolutionSink"   : TemplateResolution,
@@ -200,7 +200,7 @@ findIntensityParameter = {
 }
 
 detectCellShapeParameter = {
-    "threshold" : 700,     # (float or None)      threshold to determine mask, pixel below this are background if None no mask is generated
+    "threshold" : 200,     # (float or None)      threshold to determine mask, pixel below this are background if None no mask is generated
     "save"      : None, #os.path.join(workdir, 'shape/Z\d{4}.tif'),    #os.path.join(workdir, 'shape/Z\d{4}.tif'), # (str or None)        file name to save result of this operation if None dont save to file 
     "verbose"   : False      # (bool or int)        print / plot information about this step if None take intensities at the given pixels
 }

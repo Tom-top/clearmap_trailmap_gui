@@ -334,21 +334,31 @@ class Group() :
       
     self.name = kwargs["group"];
     
-    if kwargs["analysisDir"] == None : 
-        self.paths = [kwargs["homedir"]+os.sep+kwargs["experiment"]+kwargs["sep"]\
-                      +str(y)+os.sep+'cells_heatmap.tif' for x,y in\
-                      zip(kwargs["operation"], kwargs["sampleNames"]) if x == 'T'];
+    if kwargs["analysisDir"] == None :
+        self.paths = ["{}/{}-{}/cells_heatmap.tif".format(kwargs["homedir"], kwargs["experiment"], y)
+                      for x, y in zip(kwargs["operation"], kwargs["sampleNames"]) if x == 'T']
+        print(self.paths)
+        # self.paths = [kwargs["homedir"]+os.sep+kwargs["experiment"]+kwargs["sep"]\
+        #               +str(y)+os.sep+'cells_heatmap.tif' for x,y in\
+        #               zip(kwargs["operation"], kwargs["sampleNames"]) if x == 'T'];
                       
-        self.mouseNames = [x.split("/")[-2].split(kwargs["sep"])[-1] for x\
-                       in self.paths];
+        self.mouseNames = [x.split("/")[-2].split(kwargs["sep"])[-1] for x
+                           in self.paths]
+        # self.mouseNames = kwargs["sampleNames"]
         
     else :
-        self.paths = [os.path.join(kwargs["savingDir"], 'cells_heatmap_{0}_{1}.tif'.\
-                                   format(kwargs["experiment"], y)) for x,y in\
-                                    zip(kwargs["operation"],kwargs["sampleNames"]) if x == 'T'];
+        self.paths = ["{}/{}-{}/cells_heatmap.tif".format(kwargs["homedir"], kwargs["experiment"], y)
+                      for x, y in zip(kwargs["operation"], kwargs["sampleNames"]) if x == 'T']
+        print(self.paths)
+        # self.paths = [os.path.join(kwargs["savingDir"], 'cells_heatmap_{0}_{1}.tif'.\
+        #                            format(kwargs["experiment"], y)) for x,y in\
+        #                             zip(kwargs["operation"],kwargs["sampleNames"]) if x == 'T'];
                                    
-        self.mouseNames = [x.split("/")[-1].split(kwargs["sep"])[-1].split(".")[-2] for x\
-                       in self.paths];
+        # self.mouseNames = [x.split("/")[-3].split(kwargs["sep"])[-1].split(".")[-2] for x\
+        #                in self.paths]
+        self.mouseNames = [x.split("/")[-2].split(kwargs["sep"])[-1] for x \
+                           in self.paths]
+        # self.mouseNames = kwargs["sampleNames"]
         
     self.data = stat.readDataGroup(self.paths);
     self.mean = np.mean(self.data,axis = 0);
@@ -393,110 +403,137 @@ def launchPairAnalysis(groups, combinations, sinkDir, annotationFile, cutoff=0.0
     
     for c in combinations :
         
-        print("\n");
-        print(coloredMessage(titleMessage('Generating p-value maps {0} vs {1}'.format(groupNames[c[0]],\
-                                                groupNames[c[1]])),'darkgreen'));
+        print("\n")
+        print(coloredMessage(titleMessage('Generating p-value maps {0} vs {1}'.format(groupNames[c[0]],
+                                                groupNames[c[1]])),'darkgreen'))
         
-        pvals, psign = stat.tTestVoxelization(groups[groupNames[c[0]]].data.astype('float'),\
-                                              groups[groupNames[c[1]]].data.astype('float'),\
-                                              signed = True, pcutoff = cutoff);
+        pvals, psign = stat.tTestVoxelization(groups[groupNames[c[0]]].data.astype('float'),
+                                              groups[groupNames[c[1]]].data.astype('float'),
+                                              signed = True, pcutoff = cutoff)
                                               
-        pvalsc = stat.colorPValues(pvals, psign, positive = [0,1], negative = [1,0]);
+        pvalsc = stat.colorPValues(pvals, psign, positive = [0,1], negative = [1,0])
         
-        io.writeData(os.path.join(sinkDir, 'pvalues_'+groups[groupNames[c[0]]].name+'_vs_'+groups[groupNames[c[1]]].name+'.tif'),\
-                     rs.sagittalToCoronalData(pvalsc.astype('float32')));
+        io.writeData(os.path.join(sinkDir, 'pvalues_'+groups[groupNames[c[0]]].name+'_vs_'+groups[groupNames[c[1]]].name+'.tif'),
+                     rs.sagittalToCoronalData(pvalsc.astype('float32')))
         
-        print("\n");
-        print(coloredMessage(titleMessage('Starting region based stats {0} vs {1}'.format(groups[groupNames[c[0]]].name,\
-                                                groups[groupNames[c[1]]].name)),'darkgreen'));
+        print("\n")
+        print(coloredMessage(titleMessage('Starting region based stats {0} vs {1}'.format(groups[groupNames[c[0]]].name,
+                                                groups[groupNames[c[1]]].name)),'darkgreen'))
                                           
-        ids, pc1, pci1 = stat.countPointsGroupInRegions(groups[groupNames[c[0]]].paths2, intensityGroup = groups[groupNames[c[0]]].i,\
-                                                      returnIds = True, labeledImage = annotationFile, returnCounts = True, collapse=True);
-        _, pc2, pci2 = stat.countPointsGroupInRegions(groups[groupNames[c[1]]].paths2, intensityGroup = groups[groupNames[c[1]]].i,\
-                                              returnIds = True, labeledImage = annotationFile, returnCounts = True, collapse=True);
-                                                      
-        pvals, psign = stat.tTestPointsInRegions(pc1, pc2, pcutoff = None, signed = True, equal_var = True);
-        pvalsi, psigni = stat.tTestPointsInRegions(pci1, pci2, pcutoff = None, signed = True, equal_var = True);
+        ids, pc1 = stat.countPointsGroupInRegions(groups[groupNames[c[0]]].paths2, intensityGroup = None,
+                                                      returnIds = True, labeledImage = annotationFile, returnCounts = True, collapse=True)
+        _, pc2 = stat.countPointsGroupInRegions(groups[groupNames[c[1]]].paths2, intensityGroup = None,
+                                              returnIds = True, labeledImage = annotationFile, returnCounts = True, collapse=True)
+
+        pvals, psign = stat.tTestPointsInRegions(pc1, pc2, pcutoff = None, signed = True, equal_var = True)
+        # pvalsi, psigni = stat.tTestPointsInRegions(pci1, pci2, pcutoff = None, signed = True, equal_var = True)
+
+        id1 = pvals < 1
+        Ids = ids[id1]
         
-        id1 = pvals < 1;
-        Ids = ids[id1];
+        Pc1 = pc1[id1]
+        Pc2 = pc2[id1]
         
-        Pc1 = pc1[id1];
-        Pc2 = pc2[id1];
+        Psign = psign[id1]
+        Pvals = pvals[id1]
+        Qvals = FDR.estimateQValues(Pvals)
         
-        Psign = psign[id1];
-        Pvals = pvals[id1];
-        Qvals = FDR.estimateQValues(Pvals);
-        
-        dtypes = [('id','int64'),('mean1','f8'),('std1','f8'),('mean2','f8'),('std2','f8'),('pvalue', 'f8'),('qvalue', 'f8'),('psign', 'int64')];
+        dtypes = [('id','int64'),('mean1','f8'),('std1','f8'),('mean2','f8'),('std2','f8'),('pvalue', 'f8'),('qvalue', 'f8'),('psign', 'int64')]
 
         for i in groups[groupNames[c[0]]].mouseNames:
-            dtypes.append(("{0}".format(i), 'f8'));
+            dtypes.append(("{0}".format(i), 'f8'))
         for i in groups[groupNames[c[1]]].mouseNames:
-            dtypes.append(("{0}".format(i), 'f8'));   
-        dtypes.append(('name', 'U100'));
-        
+            dtypes.append(("{0}".format(i), 'f8'))
+        dtypes.append(('name', 'U100'))
+
         cellTable = np.zeros(Ids.shape, dtype = dtypes)
-        cellTable["id"] = Ids;
+        cellTable["id"] = Ids
         cellTable["mean1"] = Pc1.mean(axis = 1)
         cellTable["std1"] = Pc1.std(axis = 1)
         cellTable["mean2"] = Pc2.mean(axis = 1)
         cellTable["std2"] = Pc2.std(axis = 1)
-        cellTable["pvalue"] = Pvals;
-        cellTable["qvalue"] = Qvals;
+        cellTable["pvalue"] = Pvals
+        cellTable["qvalue"] = Qvals
         
-        cellTable["psign"] = Psign;
+        cellTable["psign"] = Psign
         for n, i in enumerate(groups[groupNames[c[0]]].mouseNames):
-            cellTable["{0}".format(i)] = Pc1[:,n];
+            cellTable["{0}".format(i)] = Pc1[:,n]
         for n, i in enumerate(groups[groupNames[c[1]]].mouseNames):
-            cellTable["{0}".format(i)] = Pc2[:,n];
-        cellTable["name"] = [("").join(x.split(",")) for x in lbl.labelToName(Ids)];
+            cellTable["{0}".format(i)] = Pc2[:,n]
+        cellTable["name"] = [("").join(x.split(",")) for x in lbl.labelToName(Ids)]
         
-        ii = np.argsort(Pvals);
-        cellTableSorted = cellTable.copy();
-        cellTableSorted = cellTableSorted[ii];
+        ii = np.argsort(Pvals)
+        cellTableSorted = cellTable.copy()
+        cellTableSorted = cellTableSorted[ii]
         
         with open((sinkDir+os.sep+'counts-cells_table_'+groups[groupNames[c[0]]].name+'_vs_'+groups[groupNames[c[1]]].name+'.csv'),'w') as f:
-            f.write(', '.join([str(item) for item in cellTable.dtype.names]));
-            f.write('\n');
+            f.write(', '.join([str(item) for item in cellTable.dtype.names]))
+            f.write('\n')
             for sublist in cellTableSorted:
-                f.write(', '.join([str(item) for item in sublist]));
-                f.write('\n');
-            f.close();
+                f.write(', '.join([str(item) for item in sublist]))
+                f.write('\n')
+            f.close()
             
-        Pci1 = pci1[id1];
-        Pci2 = pci2[id1];
-        
-        Psigni = psigni[id1];
-        Pvalsi = pvalsi[id1];
-        Qvalsi = FDR.estimateQValues(Pvalsi);
-        
-        intensityTable = np.zeros(Ids.shape, dtype = dtypes)
-        intensityTable["id"] = Ids;
-        intensityTable["mean1"] = Pci1.mean(axis = 1)
-        intensityTable["std1"] = Pci1.std(axis = 1)
-        intensityTable["mean2"] = Pci2.mean(axis = 1)
-        intensityTable["std2"] = Pci2.std(axis = 1)
-        intensityTable["pvalue"] = Pvalsi;
-        intensityTable["qvalue"] = Qvalsi;
-        
-        intensityTable["psign"] = Psigni;
-        for n, i in enumerate(groups[groupNames[c[0]]].mouseNames) :
-            intensityTable["{0}".format(i)] = Pci1[:,n];
-        for n, i in enumerate(groups[groupNames[c[1]]].mouseNames) :
-            intensityTable["{0}".format(i)] = Pci2[:,n];
-        intensityTable["name"] = [("").join(x.split(",")) for x in lbl.labelToName(Ids)];
-        
-        ii = np.argsort(Pvalsi);
-        intensityTableSorted = intensityTable.copy();
-        intensityTableSorted = intensityTableSorted[ii];
-        
-        with open((sinkDir+os.sep+'counts-intensities_table_'+groups[groupNames[c[0]]].name+'_vs_'+groups[groupNames[c[1]]].name+'.csv'),'w') as f:
-            f.write(', '.join([str(item) for item in intensityTable.dtype.names]));
-            f.write('\n');
-            for sublist in intensityTableSorted:
-                f.write(', '.join([str(item) for item in sublist]));
-                f.write('\n');
-            f.close();
+        # Pci1 = pci1[id1];
+        # Pci2 = pci2[id1];
+        #
+        # Psigni = psigni[id1];
+        # Pvalsi = pvalsi[id1];
+        # Qvalsi = FDR.estimateQValues(Pvalsi);
+        #
+        # intensityTable = np.zeros(Ids.shape, dtype = dtypes)
+        # intensityTable["id"] = Ids;
+        # intensityTable["mean1"] = Pci1.mean(axis = 1)
+        # intensityTable["std1"] = Pci1.std(axis = 1)
+        # intensityTable["mean2"] = Pci2.mean(axis = 1)
+        # intensityTable["std2"] = Pci2.std(axis = 1)
+        # intensityTable["pvalue"] = Pvalsi;
+        # intensityTable["qvalue"] = Qvalsi;
+        #
+        # intensityTable["psign"] = Psigni;
+        # for n, i in enumerate(groups[groupNames[c[0]]].mouseNames) :
+        #     intensityTable["{0}".format(i)] = Pci1[:,n];
+        # for n, i in enumerate(groups[groupNames[c[1]]].mouseNames) :
+        #     intensityTable["{0}".format(i)] = Pci2[:,n];
+        # intensityTable["name"] = [("").join(x.split(",")) for x in lbl.labelToName(Ids)];
+        #
+        # ii = np.argsort(Pvalsi);
+        # intensityTableSorted = intensityTable.copy();
+        # intensityTableSorted = intensityTableSorted[ii];
+        #
+        # with open((sinkDir+os.sep+'counts-intensities_table_'+groups[groupNames[c[0]]].name+'_vs_'+groups[groupNames[c[1]]].name+'.csv'),'w') as f:
+        #     f.write(', '.join([str(item) for item in intensityTable.dtype.names]));
+        #     f.write('\n');
+        #     for sublist in intensityTableSorted:
+        #         f.write(', '.join([str(item) for item in sublist]));
+        #         f.write('\n');
+        #     f.close();
   
-  
+def check_all_paths_exist(working_directory, samples):
+    errors = 0
+    for sample in samples:
+        if sample not in os.listdir(working_directory):
+            print(sample)
+            errors += 1
+    for folder in os.listdir(working_directory):
+        path_to_folder = os.path.join(working_directory, folder)
+        if not folder in samples:
+            print(folder)
+            errors += 1
+        else:
+            sub_folders_to_be_present = ["auto", "projections", "trailmap_results"]
+            for sub_folder in os.listdir(path_to_folder):
+                path_to_sub_folder = os.path.join(path_to_folder, sub_folder)
+                if not sub_folder in sub_folders_to_be_present:
+                    print(folder, sub_folder)
+                    errors += 1
+                else:
+                    files_to_be_present = ["autofluo.tif", "projections.tif", "segmentation"]
+                    for file in os.listdir(path_to_sub_folder):
+                        if not file in files_to_be_present:
+                            print(folder, os.listdir(path_to_sub_folder))
+                            errors+=1
+    if errors == 0:
+        print("[SUCCESS] No missing folders detected")
+    else:
+        print("[ERROR] {} errors detected".format(errors))

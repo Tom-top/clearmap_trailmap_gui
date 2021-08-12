@@ -43,7 +43,8 @@ This file is by default the Allen brain annotated mouse atlas with 25um
 isotropic resolution.
 """
 
-
+# clearmap_base_dir = os.path.dirname(ClearMapPath)
+# DefaultAnnotationFile   = os.path.join(clearmap_base_dir, 'ClearMap_Ressources/Regions_annotations/regions_IDs_left_right.csv');
 DefaultAnnotationFile   = os.path.join(ClearMapPath, 'Data/ARA2_annotation_info_collapse.csv');
 """str: default list of labels in the annotated image and names of annotated regions
 

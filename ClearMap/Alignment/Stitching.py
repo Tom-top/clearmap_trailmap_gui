@@ -267,16 +267,15 @@ arbirary file that matched first is returned
     #  fn = os.path.abspath(os.curdir);
     #else:
       fn = '.';
-  
-  #no group info 
-  for n in fnsp:    
+  #no group info
+  for n in fnsp:
     search = re.compile('^' + n + '$').search;
     match = None;
     for x in listdir(fn):
         if search(x):
           match = x;
-          break;  
-    
+          break;
+    print(match)
     if match is not None:
         if fn.endswith(os.path.sep):
           fn = fn + match;
@@ -907,7 +906,7 @@ def xmlImport(baseDirectory, size, resolution = (1.0, 1.0, 1.0), origin = (0.0, 
       return xml;
   else:
     xmlstring = etree.tostring(xml, pretty_print=True, xml_declaration=True, encoding="utf-8",  doctype='<!DOCTYPE TeraStitcher SYSTEM "TeraStitcher.DTD">');
-    f = open(xmlImportFile, 'w')
+    f = open(xmlImportFile, 'wb')
     f.write(xmlstring);
     f.close();
     return xmlImportFile;
@@ -973,7 +972,6 @@ def xmlImportFile(regularExpression, size = None, overlap = None, addOverlap = 0
       
 #      print(regularExpression)
 #      print(firstFile);
-      
       finfo = findFileInfo(firstFile);
       
 #      print(finfo)
@@ -1085,14 +1083,14 @@ def xmlImportFile(regularExpression, size = None, overlap = None, addOverlap = 0
   #tileExpression
   if tileExpression is None:
     def makeTileExpression(row,col):
-      te = re.sub(r'\(\?\P\<row\>.*?\)', str(row), regularExpression, count = 1);
-      return re.sub(r'\(\?\P\<col\>.*?\)', str(col), te, count = 1);
-    tileExpression = makeTileExpression;
+      te = re.sub(r"\(\?P<row>.*?\)", str(row), regularExpression, count = 1)
+      return re.sub(r"\(\?P<col>.*?\)", str(col), te, count = 1)
+    tileExpression = makeTileExpression
   elif isinstance(tileExpression, str):
-    tileExpressionString = tileExpression;
+    tileExpressionString = tileExpression
     def makeTileExpression(row,col):
-      te = re.sub(r'\(\?\P\<row\>.*?\)', str(row), tileExpressionString, count = 1);
-      return re.sub(r'\(\?\P\<col\>.*?\)', str(col), te, count = 1);
+      te = re.sub(r"\(\?P<row>.*?\)", str(row), tileExpressionString, count = 1);
+      return re.sub(r'\(\?P<col>.*?\)', str(col), te, count = 1);
     tileExpression = makeTileExpression;
   
   # create xml import   
